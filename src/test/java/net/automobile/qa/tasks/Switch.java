@@ -22,11 +22,19 @@ public class Switch extends ProviderDriver<AndroidDriver> implements Task {
 
     @Override
     public <T extends Actor> void performAs(T actor) {
-        Set<String> contextNames = getDriver(actor).getContextHandles();
+/*        Set<String> contextNames = getDriver(actor).getContextHandles();
 
         for (String contextName : contextNames) {
             if (contextName.equals(context)) {
                 getDriver(actor).context(contextName);
+            }
+        }*/
+
+        for (String contextName : getDriver(actor).getContextHandles()) {
+            System.out.println("====================" + contextName);
+            if (contextName.contains("NATIVE_APP")) {
+                getDriver(actor).context(contextName);
+                break;
             }
         }
     }
