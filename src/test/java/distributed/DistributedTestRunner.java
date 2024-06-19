@@ -34,10 +34,7 @@ public class DistributedTestRunner implements Runnable {
             if (driver != null) {
                 driver.quit();
             }
-
-            if (service.isRunning()) {
-                service.stop();
-            }
+            service.stop();
         }
     }
 }
