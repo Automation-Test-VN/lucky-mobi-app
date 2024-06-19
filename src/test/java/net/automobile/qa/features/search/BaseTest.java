@@ -1,22 +1,18 @@
 package net.automobile.qa.features.search;
 
-
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import net.serenitybdd.core.pages.PageObject;
 
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
 
-public class AndroidSetup {
-
+public class BaseTest extends PageObject {
     private static AppiumDriver driver;
 
-    public static AppiumDriver getDriver(String deviceName,String  udid,int  systemPort){
+    public static AppiumDriver setup(String udid){
 
         AppiumServiceBuilder builder = new AppiumServiceBuilder()
                 .withArgument(RELAXED_SECURITY);
@@ -28,21 +24,13 @@ public class AndroidSetup {
         AppiumDriverLocalService appiumLocal = builder.build();
         appiumLocal.start();
 
-        String appiumServiceUrl = appiumLocal.getUrl().toString();
-
         if (driver == null) {
             UiAutomator2Options options = new UiAutomator2Options()
                     .autoGrantPermissions()
                     .setUdid(udid)
-                    .setSystemPort(systemPort)
-                    .setDeviceName(deviceName)
                     .amend("browserName", "Chrome");
 
-            try {
-                driver = new AppiumDriver(new URL(appiumServiceUrl), options);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+            driver = new AppiumDriver(appiumLocal.getUrl(), options);
         }
         return driver;
     }
