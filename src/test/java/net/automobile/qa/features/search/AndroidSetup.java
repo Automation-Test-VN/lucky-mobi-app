@@ -16,8 +16,21 @@ public class AndroidSetup {
 
     private static AppiumDriver driver;
 
-    public static AppiumDriver getDriver(String deviceName,String  udid,int  systemPort){
+    public static AppiumDriver getDriver(AppiumDriverLocalService service, String udid, int systemPort){
 
+        if (driver == null) {
+            UiAutomator2Options options = new UiAutomator2Options()
+                    .autoGrantPermissions()
+                    .setUdid(udid)
+                    .setSystemPort(systemPort)
+                    .amend("browserName", "Chrome");
+
+            driver = new AppiumDriver(service.getUrl(), options);
+        }
+        return driver;
+    }
+
+    public static AppiumDriverLocalService setupAppium(){
         AppiumServiceBuilder builder = new AppiumServiceBuilder()
                 .withArgument(RELAXED_SECURITY);
         builder.usingAnyFreePort();
@@ -27,23 +40,6 @@ public class AndroidSetup {
 
         AppiumDriverLocalService appiumLocal = builder.build();
         appiumLocal.start();
-
-        String appiumServiceUrl = appiumLocal.getUrl().toString();
-
-        if (driver == null) {
-            UiAutomator2Options options = new UiAutomator2Options()
-                    .autoGrantPermissions()
-                    .setUdid(udid)
-                    .setSystemPort(systemPort)
-                    .setDeviceName(deviceName)
-                    .amend("browserName", "Chrome");
-
-            try {
-                driver = new AppiumDriver(new URL(appiumServiceUrl), options);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return driver;
+        return appiumLocal;
     }
 }

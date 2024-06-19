@@ -1,6 +1,7 @@
 package net.automobile.qa.features.search;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 
@@ -20,12 +21,19 @@ public class ParallelTestRunner implements Runnable {
 
     @Override
     public void run() {
-        AppiumDriver driver = AndroidSetup.getDriver(deviceName, udid, systemPort);
+        AppiumDriverLocalService service = AndroidSetup.setupAppium();
+        AppiumDriver driver = AndroidSetup.getDriver(service,udid,systemPort);
         Actor user = Actor.named("User on " + deviceName);
         user.can(BrowseTheWeb.with(driver));
 
         user.attemptsTo(
                 OpenBrowser.at("https://www.google.com")
         );
+
+        if(driver!=null){
+            driver.quit();
+        }
+
+        service.stop();
     }
 }
