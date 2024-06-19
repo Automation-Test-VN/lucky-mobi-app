@@ -33,19 +33,19 @@ public class DeviceManager {
         urlList.add("https://facebook.com");
         urlList.add("https://google.com");
         urlList.add("https://facebook.com");
-        urlList.add("https://google.com");
-        urlList.add("https://facebook.com");
+
         List<String> devices = getConnectedDevices();
         Thread[] threads = new Thread[devices.size()];
-
-        while (!urlList.isEmpty()) {
+        ThreadLocal<Integer> threadLocalValue = new ThreadLocal<>();
+        int urlIndex = 0;
+        while (urlIndex < urlList.size()) {
 
             boolean threadFound = false;
             for (int i = 0; i < devices.size(); i++) {
                 if (threads[i] == null || threads[i].isAlive()) {
-                    threads[i] = new Thread(new DistributedTestRunner(devices.get(i), urlList.getFirst()));
+                    threads[i] = new Thread(new DistributedTestRunner(devices.get(i), urlList.get(urlIndex)));
                     threads[i].start();
-                    urlList.removeFirst();
+                    urlIndex++;
                     threadFound = true;
                     break;
                 }
@@ -54,7 +54,11 @@ public class DeviceManager {
                 System.out.println("Waiting for a free device...");
                 Thread.sleep(10000); // Wait longer before retrying
             }
-
+        }
+        for (Thread thread : threads) {
+            if (thread != null) {
+                thread.join();
+            }
         }
     }
 }
