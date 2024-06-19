@@ -1,17 +1,18 @@
-import net.automobile.qa.features.search.ParallelTestRunner;
+package net.automobile.qa.features.search;
+
 import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 @RunWith(SerenityRunner.class)
-public class ParallelTestExecution {
+public class ParallelExecutionTest {
 
     @Test
     public void testRun(){
         String[][] devices = {
-                {"Device1", "emulator-5554", "8200"},
-                {"Device2", "emulator-5556", "8201"},
+//                {"Device1", "emulator-5554", "8200"},
+//                {"Device2", "emulator-5556", "8201"},
+                {"Samsung S23 Plus","R5CW82ST0AL","8201"}
         };
 
         Thread[] threads = new Thread[devices.length];

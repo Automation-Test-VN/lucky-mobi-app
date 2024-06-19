@@ -1,4 +1,4 @@
-package net.automobile.qa.features.search;
+package net.automobile.qa.tasks;
 
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
@@ -21,6 +21,7 @@ public class OpenBrowser implements Task {
 
     @Step("Open browser at {0}")
     public <T extends Actor> void performAs(T actor) {
+//        AndroidDriver driver = (AndroidDriver) ((WebDriverFacade) BrowseTheWeb.as(actor).getDriver()).getProxiedDriver();
         WebDriver driver = BrowseTheWeb.as(actor).getDriver();
         driver.get(url);
     }
