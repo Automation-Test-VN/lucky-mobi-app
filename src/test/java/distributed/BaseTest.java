@@ -1,4 +1,4 @@
-package net.automobile.qa.features.search;
+package distributed;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
@@ -12,17 +12,7 @@ import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXE
 public class BaseTest extends PageObject {
     private static AppiumDriver driver;
 
-    public static AppiumDriver setup(String udid){
-
-        AppiumServiceBuilder builder = new AppiumServiceBuilder()
-                .withArgument(RELAXED_SECURITY);
-        builder.usingAnyFreePort();
-
-        builder.withArgument(GeneralServerFlag.SESSION_OVERRIDE)
-                .withArgument(GeneralServerFlag.LOG_LEVEL, "info");
-
-        AppiumDriverLocalService appiumLocal = builder.build();
-        appiumLocal.start();
+    public static AppiumDriver setupDriver(AppiumDriverLocalService appiumLocal, String udid){
 
         if (driver == null) {
             UiAutomator2Options options = new UiAutomator2Options()
@@ -33,5 +23,18 @@ public class BaseTest extends PageObject {
             driver = new AppiumDriver(appiumLocal.getUrl(), options);
         }
         return driver;
+    }
+
+    public static AppiumDriverLocalService setupAppium(){
+        AppiumServiceBuilder builder = new AppiumServiceBuilder()
+                .withArgument(RELAXED_SECURITY);
+        builder.usingAnyFreePort();
+
+        builder.withArgument(GeneralServerFlag.SESSION_OVERRIDE)
+                .withArgument(GeneralServerFlag.LOG_LEVEL, "info");
+
+        AppiumDriverLocalService appiumLocal = builder.build();
+        appiumLocal.start();
+        return appiumLocal;
     }
 }
