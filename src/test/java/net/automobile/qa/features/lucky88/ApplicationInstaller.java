@@ -1,4 +1,4 @@
-package net.automobile.qa.features.search;
+package net.automobile.qa.features.lucky88;
 
 import net.automobile.AndroidObject;
 import net.automobile.android.Visit;
@@ -39,10 +39,7 @@ public class ApplicationInstaller extends AndroidObject implements Runnable {
         try{
             appium = getAppium();
             driver = getDriver(appium, deviceName, udid, systemPort);
-
-            Actor androidUser = Actor.named("Android user");
             androidUser.can(BrowseTheWeb.with(driver));
-
 
             androidUser.attemptsTo(
                     Visit.at("https://lucky88.vip/get-app"),
