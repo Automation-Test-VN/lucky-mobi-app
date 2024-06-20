@@ -1,31 +1,30 @@
-package net.automobile.qa.tasks;
+package net.automobile.adb;
 
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.Performable;
-import net.serenitybdd.screenplay.Task;
-import net.serenitybdd.screenplay.Tasks;
-import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.*;
 import net.serenitybdd.screenplay.targets.Target;
-import org.openqa.selenium.WebElement;
 
 public class Tap implements Task {
-    private Target target;
+    private final Target target;
 
     public Tap( Target target){
         this.target = target;
     }
 
-    public static Tap to(Target target) {
+    public static Tap on(Target target) {
         return Tasks.instrumented(Tap.class,target);
+    }
+
+    public static Performable on(int _x, int _y) {
+        return Task.where("{0} tap on the element at coordination", actor -> {
+            tap(_x, _y);
+        });
     }
 
     @Override
     public <T extends Actor> void performAs(T actor) {
         int x = target.resolveFor(actor).getLocation().x;
         int y = target.resolveFor(actor).getLocation().y;
-//        tap(x,y);
-        System.out.println(x);
-        System.out.println(y);
+        tap(x,y);
     }
 
     public static void tap(int x,int y) {

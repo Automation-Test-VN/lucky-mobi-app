@@ -1,27 +1,23 @@
-package net.automobile.qa.features.search;
+package net.automobile;
 
-
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
-import org.openqa.selenium.net.UrlChecker;
+import org.junit.After;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
 
-public class AndroidSetup {
+public class AndroidObject {
+    protected static AndroidDriver driver;
+    public static final String APP_ID = "io.appium.android.apis";
+    protected AppiumDriverLocalService appium;
+    protected static final int PORT = 4723;
 
-    private static AndroidDriver driver;
-    private static AndroidDriver androidDriver;
-
-    public static AndroidDriver getDriver(AppiumDriverLocalService appium, String deviceName, String  udid, int  systemPort){
+    public static AndroidDriver getDriver(AppiumDriverLocalService appium, String deviceName, String udid, int systemPort) {
         if (driver == null) {
             UiAutomator2Options options = new UiAutomator2Options()
                     .autoGrantPermissions()
@@ -35,22 +31,7 @@ public class AndroidSetup {
         return driver;
     }
 
-    public static AndroidDriver getAndroidDriver(AppiumDriverLocalService appium, String deviceName, String  udid, int  systemPort){
-        if (androidDriver == null) {
-            UiAutomator2Options options = new UiAutomator2Options()
-                    .autoGrantPermissions()
-                    .setUdid(udid)
-                    .setSystemPort(systemPort)
-                    .setDeviceName(deviceName)
-                    .setAppPackage("com.android.vending")
-                    .setAppActivity("com.google.android.finsky.activities.MainActivity");
-
-            androidDriver = new AndroidDriver(appium.getUrl(), options);
-        }
-        return androidDriver;
-    }
-
-    public static AppiumDriverLocalService getAppium(){
+    public static AppiumDriverLocalService getAppium() {
         AppiumServiceBuilder builder = new AppiumServiceBuilder()
                 .withArgument(RELAXED_SECURITY);
         builder.usingAnyFreePort();
@@ -62,6 +43,32 @@ public class AndroidSetup {
         appiumLocal.start();
 
         return appiumLocal;
-
     }
+
+    public static void startActivity(String name) {
+        driver.executeScript(
+                "mobile: startActivity",
+                Map.of("component", name)
+        );
+    }
+
+    public static void terminateApp(String name) {
+        driver.executeScript("mobile: terminateApp", Map.of("appId", APP_ID));
+    }
+
+    public static void activateApp(String name) {
+        driver.executeScript("mobile: activateApp", Map.of("appId", APP_ID));
+    }
+
+    @After
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+
+        if (appium!=null) {
+            appium.close();
+        }
+    }
+
 }

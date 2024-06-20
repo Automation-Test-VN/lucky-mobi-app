@@ -22,7 +22,7 @@ public class ParallelExecutionTest {
             String udid = devices[i][1];
             int systemPort = Integer.parseInt(devices[i][2]);
 
-            threads[i] = new Thread(new ParallelTestRunner(deviceName, udid, systemPort));
+            threads[i] = new Thread(new ParallelObjectRunner(deviceName, udid, systemPort));
             threads[i].start();
         }
 
