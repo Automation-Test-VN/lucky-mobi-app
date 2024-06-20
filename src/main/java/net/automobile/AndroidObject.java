@@ -5,7 +5,11 @@ import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -14,10 +18,16 @@ import java.util.Map;
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
 
 public class AndroidObject {
+
+    public final static String BUNDLE_ID = "com.luckynumberbouncingball";
+
     protected static AndroidDriver driver;
-    public static final String APP_ID = "io.appium.android.apis";
     protected AppiumDriverLocalService appium;
-    protected static final int PORT = 4723;
+    protected Actor androidUser = Actor.named("Android");
+
+    protected String[][] devices = {
+            {"Samsung S23 Plus","R5CW82ST0AL","8201"}
+    };
 
     public static AndroidDriver getDriver(AppiumDriverLocalService appium, String deviceName, String udid, int systemPort) {
         if (driver == null) {
@@ -27,7 +37,7 @@ public class AndroidObject {
                     .setSystemPort(systemPort)
                     .setDeviceName(deviceName)
                     .eventTimings()
-                    .setAdbExecTimeout(Duration.ofMinutes(1))
+                    .setAdbExecTimeout(Duration.ofMinutes(3))
                     .amend("browserName", "Chrome");
 
             driver = new AndroidDriver(appium.getUrl(), options);
@@ -49,20 +59,6 @@ public class AndroidObject {
         return appiumLocal;
     }
 
-    public static void startActivity(String name) {
-        driver.executeScript(
-                "mobile: startActivity",
-                Map.of("component", name)
-        );
-    }
-
-    public static void terminateApp(String name) {
-        driver.executeScript("mobile: terminateApp", Map.of("appId", APP_ID));
-    }
-
-    public static void activateApp(String name) {
-        driver.executeScript("mobile: activateApp", Map.of("appId", APP_ID));
-    }
 
     @After
     public void tearDown() {
