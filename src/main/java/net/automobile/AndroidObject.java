@@ -7,6 +7,8 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import org.junit.After;
 
+import java.io.IOException;
+import java.time.Duration;
 import java.util.Map;
 
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
@@ -24,6 +26,8 @@ public class AndroidObject {
                     .setUdid(udid)
                     .setSystemPort(systemPort)
                     .setDeviceName(deviceName)
+                    .eventTimings()
+                    .setAdbExecTimeout(Duration.ofMinutes(1))
                     .amend("browserName", "Chrome");
 
             driver = new AndroidDriver(appium.getUrl(), options);
@@ -68,6 +72,13 @@ public class AndroidObject {
 
         if (appium!=null) {
             appium.close();
+        }
+
+        ProcessBuilder process = new ProcessBuilder("taskkill", "/F", "/IM", "node.exe");
+        try {
+            process.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
