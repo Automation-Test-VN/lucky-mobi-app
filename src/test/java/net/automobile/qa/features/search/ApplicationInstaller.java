@@ -6,11 +6,14 @@ import net.automobile.android.Switch;
 import net.automobile.interactions.Wait;
 import net.automobile.qa.questions.TheApp;
 import net.automobile.qa.tasks.Close;
+import net.serenitybdd.junit.runners.SerenityRunner;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.ensure.Ensure;
 import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SessionNotCreatedException;
 
@@ -21,29 +24,16 @@ import static net.automobile.qa.ui.CHPlayUI.PLAY;
 import static net.automobile.qa.ui.HomePageUI.REGISTER;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
 
-public class ApplicationInstaller extends AndroidObject implements Runnable {
+@RunWith(SerenityRunner.class)
+public class ApplicationInstaller extends AndroidObject{
 
-    private final String deviceName;
-    private final String udid;
-    private final int systemPort;
 
-    public ApplicationInstaller(String deviceName, String udid, int systemPort) {
-        this.deviceName = deviceName;
-        this.udid = udid;
-        this.systemPort = systemPort;
-    }
-
-    @Override
+   @Test
     public void run() {
 
+
         try{
-            appium = getAppium();
-            driver = getDriver(appium, deviceName, udid, systemPort);
-
-            Actor androidUser = Actor.named("Android user");
-            androidUser.can(BrowseTheWeb.with(driver));
-
-
+            
             androidUser.attemptsTo(
                     Visit.at("https://lucky88.vip/get-app"),
                     Close.theAdsPopUp(),
