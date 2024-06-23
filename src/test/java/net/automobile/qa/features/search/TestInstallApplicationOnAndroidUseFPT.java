@@ -7,28 +7,43 @@ import net.automobile.android.Switch;
 import net.automobile.interactions.Wait;
 import net.automobile.qa.questions.TheApp;
 import net.automobile.qa.tasks.Close;
+import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.junit.runners.SerenityRunner;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actors.OnStage;
+import net.serenitybdd.screenplay.actors.OnlineCast;
 import net.serenitybdd.screenplay.ensure.Ensure;
 import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
+import java.io.IOException;
 import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 
 import static net.automobile.qa.ui.CHPlayUI.INSTALL;
 import static net.automobile.qa.ui.CHPlayUI.PLAY;
 import static net.automobile.qa.ui.HomePageUI.REGISTER;
+import static net.serenitybdd.screenplay.actors.OnStage.theActorCalled;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
 
 @RunWith(SerenityRunner.class)
 public class TestInstallApplicationOnAndroidUseFPT extends AndroidObject {
 
+    @Before
+    public void set() {
+        OnStage.setTheStage(new OnlineCast());
+    }
+
     @Test
     public void WhenInstallingTheAppFromThePlayStore() {
-
-        theActorCalled(ISP.FPT).attemptsTo(
+        driver = getDriver(ISP.FPT.getDeviceName(),ISP.FPT.getUDID() );
+        theActorCalled("Jacob").can(BrowseTheWeb.with(driver));
+        theActorCalled("Jacob").attemptsTo(
                 Visit.at("https://lucky88.vip/get-app"),
                 Close.theAdsPopUp(),
 

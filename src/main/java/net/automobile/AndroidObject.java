@@ -12,6 +12,7 @@ import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 import org.junit.After;
 import org.junit.Before;
+import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -22,44 +23,21 @@ import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXE
 
 public class AndroidObject {
 
-    @Managed
-    protected static AndroidDriver driver;
-
-    //protected Actor androidUser = Actor.named("Android user");
-
-    Map<String, Actor> actors = new HashMap<>();
-
-    protected Actor theActorCalled(ISP actor) {
-        Actor currentActor = Actor.named(actor.getName());
-        actors.put(actor.getName(), currentActor);
-        return actors.get(actor.getName());
-    }
+    @Managed(options = "noReset=true")
+    public static AndroidDriver driver;
 
 
+    public static AndroidDriver getDriver(String deviceName, String udid) {
 
-
-    @Before
-    public void tearUp() {
-        OnStage.setTheStage(new OnlineCast());
-
-        driver = getDriver("Samsung S23 Plus", "R5CW82ST0AL", 8201);
-        theActorCalled(ISP.FPT).can(BrowseTheWeb.with(driver));
-    }
-
-
-    public static AndroidDriver getDriver(String deviceName, String udid, int systemPort) {
-        if (driver == null) {
             UiAutomator2Options options = new UiAutomator2Options()
                     .autoGrantPermissions()
                     .setUdid(udid)
-                    .setSystemPort(systemPort)
+                    .setSystemPort(8200)
                     .setDeviceName(deviceName)
                     .eventTimings()
                     .setAdbExecTimeout(Duration.ofMinutes(1))
                     .amend("browserName", "Chrome");
-
-            driver = new AndroidDriver(getAppium().getUrl(), options);
-        }
+        driver = new AndroidDriver(getAppium().getUrl(), options);
         return driver;
     }
 
@@ -83,7 +61,7 @@ public class AndroidObject {
             driver.quit();
         }
 
-/*        if (appium != null) {
+       /* if (appium != null) {
             appium.close();
         }*/
 
