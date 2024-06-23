@@ -1,0 +1,14 @@
+{
+	"FPT": {
+		"actor": "FPT",
+		"udid": "R5CW82ST0AL",
+		"deviceName": "Samsung 23S Plus",
+		"platformVersion": "14.0"
+	},
+	"VNPT": {
+		"actor": "VNPT",
+		"udid": "AR5CW82ST0AL",
+		"deviceName": "Galaxy Note 9",
+		"platformVersion": "14.0"
+	}
+}
