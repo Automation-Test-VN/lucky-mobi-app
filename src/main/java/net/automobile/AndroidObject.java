@@ -7,6 +7,7 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import net.serenitybdd.annotations.Managed;
 import org.junit.After;
+import org.springframework.util.SocketUtils;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -15,16 +16,17 @@ import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXE
 
 public class AndroidObject {
 
+    public final static String BUNDLE_ID = "com.luckynumberbouncingball";
+
     @Managed(options = "noReset=true")
     public static AndroidDriver driver;
-
 
     public static AndroidDriver getDriver(String deviceName, String udid) {
 
             UiAutomator2Options options = new UiAutomator2Options()
                     .autoGrantPermissions()
                     .setUdid(udid)
-                    .setSystemPort(8200)
+                    .setSystemPort(SocketUtils.findAvailableTcpPort(8200,8299))
                     .setDeviceName(deviceName)
                     .eventTimings()
                     .setAdbExecTimeout(Duration.ofMinutes(1))
