@@ -23,18 +23,16 @@ public class AndroidObject {
     protected static AndroidDriver driver;
 
     protected Actor androidUser = Actor.named("Android user");
-    protected AppiumDriverLocalService appium;
+
 
     @Before
     public void tearUp() {
-        appium = getAppium();
-        driver = getDriver(appium, "Samsung S23 Plus", "R5CW82ST0AL", 8201);
-
+        driver = getDriver("Samsung S23 Plus", "R5CW82ST0AL", 8201);
         androidUser.can(BrowseTheWeb.with(driver));
     }
 
 
-    public static AndroidDriver getDriver(AppiumDriverLocalService appium, String deviceName, String udid, int systemPort) {
+    public static AndroidDriver getDriver(String deviceName, String udid, int systemPort) {
         if (driver == null) {
             UiAutomator2Options options = new UiAutomator2Options()
                     .autoGrantPermissions()
@@ -45,17 +43,16 @@ public class AndroidObject {
                     .setAdbExecTimeout(Duration.ofMinutes(1))
                     .amend("browserName", "Chrome");
 
-            driver = new AndroidDriver(appium.getUrl(), options);
+            driver = new AndroidDriver(getAppium().getUrl(), options);
         }
         return driver;
     }
 
     public static AppiumDriverLocalService getAppium() {
         AppiumServiceBuilder builder = new AppiumServiceBuilder()
-                .withArgument(RELAXED_SECURITY);
-        builder.usingAnyFreePort();
-
-        builder.withArgument(GeneralServerFlag.SESSION_OVERRIDE)
+                .usingAnyFreePort()
+                .withArgument(RELAXED_SECURITY)
+                .withArgument(GeneralServerFlag.SESSION_OVERRIDE)
                 .withArgument(GeneralServerFlag.LOG_LEVEL, "info");
 
         AppiumDriverLocalService appiumLocal = builder.build();
@@ -71,9 +68,9 @@ public class AndroidObject {
             driver.quit();
         }
 
-        if (appium != null) {
+/*        if (appium != null) {
             appium.close();
-        }
+        }*/
 
         ProcessBuilder process = new ProcessBuilder("taskkill", "/F", "/IM", "node.exe");
         try {
