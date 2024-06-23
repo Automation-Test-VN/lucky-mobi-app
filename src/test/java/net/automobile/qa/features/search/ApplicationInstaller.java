@@ -1,3 +1,4 @@
+/*
 package net.automobile.qa.features.search;
 
 import net.automobile.AndroidObject;
@@ -58,3 +59,4 @@ public class ApplicationInstaller extends AndroidObject{
         }
     }
 }
+*/

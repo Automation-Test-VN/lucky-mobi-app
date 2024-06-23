@@ -8,11 +8,14 @@ import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.actors.OnStage;
+import net.serenitybdd.screenplay.actors.OnlineCast;
 import org.junit.After;
 import org.junit.Before;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 
 import static io.appium.java_client.service.local.flags.GeneralServerFlag.RELAXED_SECURITY;
@@ -22,13 +25,25 @@ public class AndroidObject {
     @Managed
     protected static AndroidDriver driver;
 
-    protected Actor androidUser = Actor.named("Android user");
+    //protected Actor androidUser = Actor.named("Android user");
+
+    Map<String, Actor> actors = new HashMap<>();
+
+    protected Actor theActorCalled(ISP actor) {
+        Actor currentActor = Actor.named(actor.getName());
+        actors.put(actor.getName(), currentActor);
+        return actors.get(actor.getName());
+    }
+
+
 
 
     @Before
     public void tearUp() {
+        OnStage.setTheStage(new OnlineCast());
+
         driver = getDriver("Samsung S23 Plus", "R5CW82ST0AL", 8201);
-        androidUser.can(BrowseTheWeb.with(driver));
+        theActorCalled(ISP.FPT).can(BrowseTheWeb.with(driver));
     }
 
 
