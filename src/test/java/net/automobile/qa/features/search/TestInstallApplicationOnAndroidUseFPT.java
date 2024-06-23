@@ -28,7 +28,7 @@ import java.util.concurrent.TimeoutException;
 import static net.automobile.qa.ui.CHPlayUI.INSTALL;
 import static net.automobile.qa.ui.CHPlayUI.PLAY;
 import static net.automobile.qa.ui.HomePageUI.REGISTER;
-import static net.serenitybdd.screenplay.actors.OnStage.theActorCalled;
+import static net.serenitybdd.screenplay.actors.OnStage.*;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
 
 @RunWith(SerenityRunner.class)
@@ -41,15 +41,20 @@ public class TestInstallApplicationOnAndroidUseFPT extends AndroidObject {
 
     @Test
     public void WhenInstallingTheAppFromThePlayStore() {
+
         driver = getDriver(ISP.FPT.getDeviceName(),ISP.FPT.getUDID() );
+
         theActorCalled("Jacob").can(BrowseTheWeb.with(driver));
-        theActorCalled("Jacob").attemptsTo(
+
+        theActorInTheSpotlight().attemptsTo(
                 Visit.at("https://lucky88.vip/get-app"),
                 Close.theAdsPopUp(),
 
                 Wait.aBit(3),
                 WaitUntil.the(By.xpath("//img[contains(@src,'android.svg')]/parent::a"), isClickable()),
-                Click.on(By.xpath("//img[contains(@src,'android.svg')]/parent::a")),
+                Click.on(By.xpath("//img[contains(@src,'android.svg')]/parent::a")));
+
+        withCurrentActor(
                 Switch.to("NATIVE_APP"),
                 Click.on(INSTALL),
                 //Install.theApplication()
